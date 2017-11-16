@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+mcs -pkg:gtk-sharp-2.0 src/Main.cs src/InventoryItem.cs src/Map.cs
+mv Main.exe bin/Game.exe

@@ -1,0 +1,4 @@
+#!/bin/bash
+kate src/game.cs
+kate src/InventoryItem.cs
+kate src/Map.cs
