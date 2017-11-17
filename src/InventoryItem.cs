@@ -20,7 +20,7 @@ public class InventoryWindow : Gtk.Window
         viewport.Add(itemList);
         for (int i = 0; i < Game.Inventory.Count; i++)
         {
-            itemList.PackStart(new InventoryItemGroup(Game.Inventory[i]), false, false, 0);
+            itemList.PackStart(new InventoryItemGroup(Game.Inventory[i], this), false, false, 0);
         }
         Add(wrapper);
         ShowAll();
@@ -30,9 +30,11 @@ public class InventoryWindow : Gtk.Window
 public class InventoryItemGroup : Gtk.Bin
 {
     ItemGroup itemGroup;
+    InventoryWindow parent;
     
-    public InventoryItemGroup(ItemGroup ig) : base()
+    public InventoryItemGroup(ItemGroup ig, InventoryWindow parent) : base()
     {
+        this.parent = parent;
         build(ig);
     }
     
@@ -83,10 +85,19 @@ public class InventoryItemGroup : Gtk.Bin
     {
         if (itemGroup.Count > 1)
         {
-            Dialog dialog = new Dialog("Drop Item", Toplevel.Parent, Gtk.DialogFlags.DestroyWithParent)
+            Dialog dialog = new Dialog("Drop Item", parent, Gtk.DialogFlags.DestroyWithParent)
             {
-                Modal = true
+                 Modal = true,
+                 HasSeparator = true
             };
+            NumericalEntry entry = new NumericalEntry();
+            Label query = new Label("Please input the amount to drop.");
+            dialog.VBox.PackStart(query);
+            dialog.VBox.PackStart(entry);
+            query.Show();
+            entry.Show();
+            dialog.AddButton("Accept", ResponseType.Accept);
+            dialog.AddButton("Close", ResponseType.Close);
             dialog.Run();
             dialog.Destroy();
         }
@@ -96,6 +107,27 @@ public class InventoryItemGroup : Gtk.Bin
             Destroy();
         }
         
+    }
+}
+
+public class NumericalEntry : Entry
+{
+    public NumericalEntry() : base()
+    {
+    
+    }
+    
+    protected override void OnTextInserted(string text, ref int position)
+    {
+        try
+        {
+            int.Parse(text);
+            base.OnTextInserted(text, ref position);
+        }
+        catch
+        {
+            
+        }
     }
 }
 

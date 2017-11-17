@@ -4,15 +4,30 @@ using Gtk;
 
 enum Direction { North, East, South, West }
 
+public class Vector
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+
 static class Map
 {
     static Room[][] rooms;
+    static Vector mapSize;
     public static int roomCount;
     public static int GetID { get { roomCount++; return roomCount - 1; } }
     
-    public static void Generate()
+    public static void Generate(Vector size)
     {
+        mapSize = size;
         
+        for (int i = 0; i < mapSize.Y; i++)
+        {
+            for (int j = 0; j < mapSize.X; j++)
+            {
+                Console.WriteLine(j + ", " + i);
+            }
+        }
     }
 }
 
